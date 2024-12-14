@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "rimraf dist && vite",
-		"build": "rimraf dist && tsc -b && vite build",
+		"build": "rimraf dist &&tsc -b && vite build",
 		"clean": "rimraf dist",
 		"lint": "biome lint .",
 		"preview": "vite preview"
@@ -16,9 +16,8 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
-		"@crxjs/vite-plugin": "^1.0.14",
+		"@crxjs/vite-plugin": "^2.0.0-beta.28",
 		"@eslint/js": "^9.15.0",
-		"@types/bun": "^1.1.14",
 		"@types/chrome": "^0.0.287",
 		"@types/react": "^18.3.12",
 		"@types/react-dom": "^18.3.1",
