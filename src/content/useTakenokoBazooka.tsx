@@ -3,9 +3,11 @@ import TakenokoBazooka from "./TakenokoBazooka";
 import TakenokoRockets from "./TakenokoRockets";
 
 interface TakenokoRocketProps {
+	takenokoRocketId: number;
 	yAxis: number;
 	startTime: number;
 	timestamp: number;
+	exploded: boolean;
 }
 
 const useTalenokoBazooka = () => {
@@ -15,14 +17,41 @@ const useTalenokoBazooka = () => {
 	const animationFrameIdRef = useRef<number | null>(null);
 	const [rockets, setRockets] = useState<TakenokoRocketProps[]>([]);
 
+	const explode = (takenokoRocketId: number) => {
+		console.log("呼ばれた");
+		console.log(`takenokoRocketId: ${takenokoRocketId}`);
+		for (const rocket of rockets) {
+			console.log(`rocket.takenokoRocketId: ${rocket.takenokoRocketId}`);
+			if (rocket.takenokoRocketId === takenokoRocketId) {
+				rocket.exploded = true;
+				console.log("あった！！！！！");
+			}
+		}
+		setRockets((rockets) => {
+			return rockets.filter(
+				(rocket) => rocket.takenokoRocketId !== takenokoRocketId,
+			);
+		});
+	};
+
 	const loop = useCallback(
 		(timestamp: number) => {
 			animationFrameIdRef.current = requestAnimationFrame(loop);
+
 			if (launchStanby) {
 				setLaunchStanby(false);
+				const rocketId = Math.random();
+				console.log(`rocketId: ${rocketId}`);
+				console.log(`rockets num: ${rockets.length}`);
 				setRockets([
 					...rockets,
-					{ yAxis: cursorYAxis, startTime: timestamp, timestamp },
+					{
+						yAxis: cursorYAxis,
+						startTime: timestamp,
+						timestamp,
+						takenokoRocketId: rocketId,
+						exploded: false,
+					},
 				]);
 			}
 			setRockets((rockets) => {
@@ -30,10 +59,6 @@ const useTalenokoBazooka = () => {
 					return { ...rocket, timestamp };
 				});
 			});
-			console.log(rockets);
-			console.log(
-				rockets.map((rocket) => (rocket.timestamp - rocket.startTime) * 0.01),
-			);
 		},
 		[cursorYAxis, launchStanby, rockets],
 	);
@@ -55,7 +80,7 @@ const useTalenokoBazooka = () => {
 	};
 
 	const RenderTakenokoRockets = () => {
-		return <TakenokoRockets takenokoRockets={rockets} />;
+		return <TakenokoRockets takenokoRockets={rockets} explode={explode} />;
 	};
 
 	const launchTakenokoRockets = () => {

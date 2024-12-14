@@ -1,10 +1,12 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import BattleField from "./BattleField";
+import ExplosionManager from "./explosionManager";
 
 let flg = true;
 
 if (flg) {
+	ExplosionManager.getInstance();
 	const battlePanel = document.createElement("div");
 	battlePanel.style.position = "absolute";
 	battlePanel.style.width = "100vw";

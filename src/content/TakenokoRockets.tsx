@@ -4,25 +4,36 @@ interface TakenokoRocketProps {
 	yAxis: number;
 	startTime: number;
 	timestamp: number;
+	takenokoRocketId: number;
+	exploded: boolean;
 }
 
 interface TakenokoRocketsProps {
 	takenokoRockets: TakenokoRocketProps[];
+	explode: (takenokoRocketId: number) => void;
 }
 
-const TakenokoRockets = ({ takenokoRockets }: TakenokoRocketsProps) => {
+const TakenokoRockets = ({
+	takenokoRockets,
+	explode,
+}: TakenokoRocketsProps) => {
 	return (
 		<>
-			{takenokoRockets.map(({ yAxis, startTime, timestamp }) => {
-				return (
-					<TakenokoRocket
-						key={startTime}
-						yAxis={yAxis}
-						startTime={startTime}
-						timestamp={timestamp}
-					/>
-				);
-			})}
+			{takenokoRockets.map(
+				({ yAxis, startTime, timestamp, exploded, takenokoRocketId }) => {
+					return (
+						<TakenokoRocket
+							key={takenokoRocketId}
+							yAxis={yAxis}
+							startTime={startTime}
+							timestamp={timestamp}
+							takenokoRocketId={takenokoRocketId}
+							exploded={exploded}
+							explode={explode}
+						/>
+					);
+				},
+			)}
 		</>
 	);
 };
