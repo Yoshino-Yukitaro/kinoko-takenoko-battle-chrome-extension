@@ -42,7 +42,7 @@ const TakenokoRocket = ({
 		<div
 			style={{
 				position: "absolute",
-				left: `calc(100vw - ${calcXAxis()}px)`,
+				left: `calc(100vw - ${calcXAxis() + 80}px)`,
 				top: `${yAxis}px`,
 				backgroundColor: "#F4D386",
 				width: "80px",
