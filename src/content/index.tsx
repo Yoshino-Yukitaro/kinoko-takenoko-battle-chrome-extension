@@ -3,11 +3,10 @@ import { createRoot } from "react-dom/client";
 import BattleField from "./BattleField";
 import ExplosionManager from "./explosionManager";
 
-let flg = true;
-
-if (flg) {
+const activate = () => {
 	ExplosionManager.getInstance();
 	const battlePanel = document.createElement("div");
+	battlePanel.id = "battlePanel";
 	battlePanel.style.position = "absolute";
 	battlePanel.style.width = "100vw";
 	battlePanel.style.height = "100vh";
@@ -15,10 +14,32 @@ if (flg) {
 	battlePanel.style.left = "0";
 	battlePanel.style.zIndex = "255";
 	document.body.appendChild(battlePanel);
-	document.body.style.overflow = "hidden";
 	createRoot(battlePanel).render(
 		<React.StrictMode>
 			<BattleField />
 		</React.StrictMode>,
 	);
-}
+};
+
+const deactivate = () => {
+	const battlePanel = document.getElementById("battlePanel");
+	if (battlePanel) {
+		battlePanel.remove();
+	}
+};
+
+chrome.storage.onChanged.addListener((changes) => {
+	if (changes.active) {
+		if (changes.active.newValue) {
+			activate();
+		} else {
+			deactivate();
+		}
+	}
+});
+
+chrome.storage.local.get("active", (data) => {
+	if (data.active) {
+		activate();
+	}
+});

@@ -4,7 +4,7 @@ const manifest = defineManifest({
 	manifest_version: 3,
 	name: "サクッときのこたけのこ戦争",
 	version: "1.0.0",
-	permissions: ["activeTab"],
+	permissions: ["activeTab", "storage"],
 	content_scripts: [
 		{
 			matches: ["http://*/*", "https://*/*"],
