@@ -12,7 +12,7 @@ interface KinokoRocketProps {
 }
 
 const useKinokoBazooka = () => {
-	const [cursorYAxis, setCursorYAxis] = useState(0);
+	const [cursorYAxis, setCursorYAxis] = useState(window.innerHeight / 2);
 	const [launchStanby, setLaunchStanby] = useState(false);
 	const animationFrameIdRef = useRef<number | null>(null);
 	const [rockets, setRockets] = useState<KinokoRocketProps[]>([]);
@@ -54,9 +54,9 @@ const useKinokoBazooka = () => {
 		}
 		if (direction === "down") {
 			setCursorYAxis((cursorYAxis) =>
-				cursorYAxis + speed < window.innerHeight
+				cursorYAxis + speed < window.innerHeight - 40
 					? cursorYAxis + speed
-					: window.innerHeight,
+					: window.innerHeight - 40,
 			);
 		}
 	};
