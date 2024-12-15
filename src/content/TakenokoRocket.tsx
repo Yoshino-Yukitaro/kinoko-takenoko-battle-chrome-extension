@@ -44,9 +44,23 @@ const TakenokoRocket = ({
 				position: "absolute",
 				left: `calc(100vw - ${calcXAxis()}px)`,
 				top: `${yAxis}px`,
+				backgroundColor: "#F4D386",
+				width: "80px",
+				height: "40px",
+				clipPath: "ellipse(70px 20px at 100% 50%)",
 			}}
 		>
-			あ
+			<div
+				style={{
+					position: "absolute",
+					top: "0",
+					left: "0%",
+					backgroundColor: "#392921",
+					width: "70px",
+					height: "40px",
+					paddingLeft: "20px",
+				}}
+			/>
 		</div>
 	);
 };
