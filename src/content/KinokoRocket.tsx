@@ -55,14 +55,14 @@ const KinokoRocket = ({
 					left: "0%",
 					backgroundColor: "#F4D386",
 					width: "70px",
-					height: "20px",
+					height: "15px",
 					borderRadius: "16px",
 				}}
 			>
 				<div
 					style={{
 						position: "absolute",
-						top: "-10px",
+						top: "-12.5px",
 						left: "40px",
 						backgroundColor: "#392921",
 						width: "30px",
