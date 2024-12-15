@@ -1,20 +1,43 @@
+import { useState } from "react";
+import type { KeyboardEvent } from "react";
 import useTalenokoBazooka from "./useTakenokoBazooka";
 
 const BattleField = () => {
-	const moveTakenokoBazooka = (e: React.MouseEvent) => {
-		takenokoBazookaUpdateCursorYAxis(e.clientY);
-	};
+	const [active, setActive] = useState(true);
+	const [speed, setSpeed] = useState(10);
 	const {
-		activate: takenokoBazookaActivate,
-		deactivate: takenokoBazookaDeactivate,
-		updateCursorYAxis: takenokoBazookaUpdateCursorYAxis,
 		RenderTakenokoBazooka,
 		RenderTakenokoRockets,
 		launchTakenokoRockets,
+		moveCursorYAxis,
 	} = useTalenokoBazooka();
-	const onClickHandler = (e: React.MouseEvent) => {
-		launchTakenokoRockets();
+
+	const keyDownHandler = (e: KeyboardEvent<HTMLDivElement>) => {
+		if (!active) return;
+		if (e.key === "Tab") {
+			e.preventDefault();
+		}
+		if (e.key === "ArrowUp") {
+			e.preventDefault();
+			moveCursorYAxis("up", speed);
+			setSpeed(speed + 1);
+		}
+		if (e.key === "ArrowDown") {
+			e.preventDefault();
+			moveCursorYAxis("down", speed);
+			setSpeed(speed + 1);
+		}
+		if (e.key === "ArrowLeft") {
+			launchTakenokoRockets();
+		}
 	};
+
+	const keyUpHandler = (e: KeyboardEvent<HTMLDivElement>) => {
+		if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+			setSpeed(10);
+		}
+	};
+
 	return (
 		<div
 			style={{
@@ -25,8 +48,9 @@ const BattleField = () => {
 				left: 0,
 				backgroundColor: "rgba(0, 0, 0, 0.5)",
 			}}
-			onClick={onClickHandler}
-			onMouseMove={moveTakenokoBazooka}
+			onKeyDown={keyDownHandler}
+			onKeyUp={keyUpHandler}
+			tabIndex={1}
 		>
 			<RenderTakenokoBazooka />
 			<RenderTakenokoRockets />

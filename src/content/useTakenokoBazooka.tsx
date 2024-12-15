@@ -11,7 +11,6 @@ interface TakenokoRocketProps {
 }
 
 const useTalenokoBazooka = () => {
-	const [active, setActive] = useState(true);
 	const [cursorYAxis, setCursorYAxis] = useState(0);
 	const [launchStanby, setLaunchStanby] = useState(false);
 	const animationFrameIdRef = useRef<number | null>(null);
@@ -32,6 +31,21 @@ const useTalenokoBazooka = () => {
 				(rocket) => rocket.takenokoRocketId !== takenokoRocketId,
 			);
 		});
+	};
+
+	const moveCursorYAxis = (direction: "up" | "down", speed: number) => {
+		if (direction === "up") {
+			setCursorYAxis((cursorYAxis) =>
+				cursorYAxis - speed > 0 ? cursorYAxis - speed : 0,
+			);
+		}
+		if (direction === "down") {
+			setCursorYAxis((cursorYAxis) =>
+				cursorYAxis + speed < window.innerHeight
+					? cursorYAxis + speed
+					: window.innerHeight,
+			);
+		}
 	};
 
 	const loop = useCallback(
@@ -68,13 +82,6 @@ const useTalenokoBazooka = () => {
 		return () => cancelAnimationFrame(animationFrameIdRef.current as number);
 	}, [loop]);
 
-	const activate = () => setActive(true);
-	const deactivate = () => setActive(false);
-	const updateCursorYAxis = (y: number) => {
-		if (active) {
-			setCursorYAxis(y);
-		}
-	};
 	const RenderTakenokoBazooka = () => {
 		return <TakenokoBazooka yAxis={cursorYAxis} />;
 	};
@@ -88,12 +95,10 @@ const useTalenokoBazooka = () => {
 	};
 
 	return {
-		activate,
-		deactivate,
-		updateCursorYAxis,
 		RenderTakenokoBazooka,
 		RenderTakenokoRockets,
 		launchTakenokoRockets,
+		moveCursorYAxis,
 	};
 };
 

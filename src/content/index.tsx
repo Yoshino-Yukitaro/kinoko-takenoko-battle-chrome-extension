@@ -13,6 +13,7 @@ const activate = () => {
 	battlePanel.style.top = "0";
 	battlePanel.style.left = "0";
 	battlePanel.style.zIndex = "255";
+	document.body.style.overflow = "hidden";
 	document.body.appendChild(battlePanel);
 	createRoot(battlePanel).render(
 		<React.StrictMode>
@@ -26,6 +27,7 @@ const deactivate = () => {
 	if (battlePanel) {
 		battlePanel.remove();
 	}
+	document.body.style.overflow = "auto";
 };
 
 chrome.storage.onChanged.addListener((changes) => {
