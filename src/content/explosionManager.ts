@@ -1,6 +1,7 @@
 interface LeafRect {
 	rightTop: { x: number; y: number };
 	rightBottom: { x: number; y: number };
+	leftx: number;
 	id: string;
 }
 
@@ -24,6 +25,7 @@ class ExplosionManager {
 					leaves.push({
 						rightTop: { x, y: rect.top },
 						rightBottom: { x, y: rect.bottom },
+						leftx: rect.left,
 						id,
 					});
 				}
@@ -41,30 +43,42 @@ class ExplosionManager {
 		}
 		return ExplosionManager.instance;
 	}
-	public judge(x: number, y: number): boolean {
+	public judge(x: number, y: number, kind: "kinoko" | "takenoko"): boolean {
 		const explodedLeafs = this.domRects.filter((rect) => {
+			if (kind === "kinoko") {
+				return x > rect.leftx && y < rect.rightBottom.y && y > rect.rightTop.y;
+			}
 			return (
 				x > rect.rightTop.x && y < rect.rightBottom.y && y > rect.rightTop.y
 			);
 		});
 		if (explodedLeafs.length > 0) {
-			this.explodeAround(x, y);
+			this.explodeAround(x, y, kind);
 			console.log("Explosion!!!!!!!!!!!!!!!");
 			return true;
 		}
 		return false;
 	}
-	private explodeAround(x: number, y: number) {
+	private explodeAround(x: number, y: number, kind: "kinoko" | "takenoko") {
 		const explodedLeafs = this.domRects.filter((rect) => {
 			// 半径100px以内にあるかどうかを判定
+			if (kind === "kinoko") {
+				return (x - rect.leftx) ** 2 + (rect.rightTop.y - y) ** 2 < 10000;
+			}
 			return (rect.rightTop.x - x) ** 2 + (rect.rightTop.y - y) ** 2 < 10000;
 		});
 
 		for (const leaf of explodedLeafs) {
-			this.explode(leaf.id, x, y);
+			this.explode(leaf.id, x, y, kind);
 		}
 	}
-	private explode(leafId: string, cx: number, cy: number) {
+	private explode(
+		leafId: string,
+		cx: number,
+		cy: number,
+		kind: "kinoko" | "takenoko",
+	) {
+		const vector = kind === "kinoko" ? 1 : -1;
 		const leaf = document.getElementById(leafId);
 		const maxWindowWidth = window.innerWidth;
 		if (leaf) {
@@ -92,6 +106,9 @@ class ExplosionManager {
 					// 半径100px以内にあるspan要素を抽出
 					const explodedSpans = spans.filter((span) => {
 						const rect = span.getBoundingClientRect();
+						if (kind === "kinoko") {
+							return (cx - rect.left) ** 2 + (rect.top - cy) ** 2 < 10000;
+						}
 						return (
 							(maxWindowWidth - rect.right - cx) ** 2 + (rect.top - cy) ** 2 <
 							10000
@@ -100,19 +117,38 @@ class ExplosionManager {
 
 					// span要素をランダムに動かす
 					for (const span of explodedSpans) {
-						const distance = Math.sqrt(
-							(maxWindowWidth - span.getBoundingClientRect().right - cx) ** 2 +
-								(span.getBoundingClientRect().top - cy) ** 2,
-						);
-						const tx =
-							(110 / distance) *
-								(maxWindowWidth - span.getBoundingClientRect().right - cx) +
-							(Math.random() - 0.5) * 5;
+						const calcDistance = () => {
+							if (kind === "kinoko") {
+								return Math.sqrt(
+									(span.getBoundingClientRect().left - cx) ** 2 +
+										(span.getBoundingClientRect().top - cy) ** 2,
+								);
+							}
+							return Math.sqrt(
+								(maxWindowWidth - span.getBoundingClientRect().right - cx) **
+									2 +
+									(span.getBoundingClientRect().top - cy) ** 2,
+							);
+						};
+						const calcTx = () => {
+							if (kind === "kinoko") {
+								return (
+									(110 / calcDistance()) *
+										(span.getBoundingClientRect().left - cx) +
+									(Math.random() - 0.5) * 5
+								);
+							}
+							return (
+								(110 / calcDistance()) *
+									(maxWindowWidth - span.getBoundingClientRect().right - cx) +
+								(Math.random() - 0.5) * 5
+							);
+						};
 						const ty =
-							(110 / distance) * (span.getBoundingClientRect().top - cy) +
+							(110 / calcDistance()) * (span.getBoundingClientRect().top - cy) +
 							(Math.random() - 0.5) * 5;
 						const rotate = (Math.random() - 0.5) * 360;
-						span.style.transform = `translate(${tx * -1}px, ${ty}px) rotate(${rotate}deg)`;
+						span.style.transform = `translate(${calcTx() * vector}px, ${ty}px) rotate(${rotate}deg)`;
 					}
 
 					// domRectsを更新する
@@ -124,6 +160,7 @@ class ExplosionManager {
 							return {
 								rightTop: { x, y: rect.top },
 								rightBottom: { x, y: rect.bottom },
+								leftx: rect.left,
 								id: span.id,
 							};
 						}),
@@ -135,20 +172,37 @@ class ExplosionManager {
 				leaf.style.position = "relative";
 				leaf.style.zIndex = "256";
 				leaf.style.display = "inline-block";
-				const distance = Math.sqrt(
-					(maxWindowWidth - leaf.getBoundingClientRect().right - cx) ** 2 +
-						(leaf.getBoundingClientRect().top - cy) ** 2,
-				);
-				console.log(distance);
-				const tx =
-					(110 / distance) *
-						(maxWindowWidth - leaf.getBoundingClientRect().right - cx) +
-					(Math.random() - 0.5) * 1;
+				const calcDistance = () => {
+					if (kind === "kinoko") {
+						return Math.sqrt(
+							(leaf.getBoundingClientRect().left - cx) ** 2 +
+								(leaf.getBoundingClientRect().top - cy) ** 2,
+						);
+					}
+					return Math.sqrt(
+						(maxWindowWidth - leaf.getBoundingClientRect().right - cx) ** 2 +
+							(leaf.getBoundingClientRect().top - cy) ** 2,
+					);
+				};
+				const calcTx = () => {
+					if (kind === "kinoko") {
+						return (
+							(110 / calcDistance()) *
+								(leaf.getBoundingClientRect().left - cx) +
+							(Math.random() - 0.5) * 5
+						);
+					}
+					return (
+						(110 / calcDistance()) *
+							(maxWindowWidth - leaf.getBoundingClientRect().right - cx) +
+						(Math.random() - 0.5) * 5
+					);
+				};
 				const ty =
-					(110 / distance) * (leaf.getBoundingClientRect().top - cy) +
+					(110 / calcDistance()) * (leaf.getBoundingClientRect().top - cy) +
 					(Math.random() - 0.5) * 1;
 				const rotate = (Math.random() - 0.5) * 360;
-				leaf.style.transform = `translate(${tx * -1}px, ${ty}px) rotate(${rotate}deg)`;
+				leaf.style.transform = `translate(${calcTx() * vector}px, ${ty}px) rotate(${rotate}deg)`;
 
 				// domRectsを更新する
 				const rect = leaf.getBoundingClientRect();
@@ -158,6 +212,7 @@ class ExplosionManager {
 					{
 						rightTop: { x, y: rect.top },
 						rightBottom: { x, y: rect.bottom },
+						leftx: rect.left,
 						id: leafId,
 					},
 				];

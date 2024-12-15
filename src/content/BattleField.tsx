@@ -1,40 +1,70 @@
 import { useState } from "react";
 import type { KeyboardEvent } from "react";
-import useTalenokoBazooka from "./useTakenokoBazooka";
+import useTakenokoBazooka from "./useTakenokoBazooka";
+import useKinokoBazooka from "./useKinokoBazooka";
 
 const BattleField = () => {
 	const [active, setActive] = useState(true);
-	const [speed, setSpeed] = useState(10);
+	const [takenokoBazookaSpeed, setTakenokoBazookaSpeed] = useState(10);
+	const [kinokoBazookaSpeed, setKinokoBazookaSpeed] = useState(10);
 	const {
 		RenderTakenokoBazooka,
 		RenderTakenokoRockets,
 		launchTakenokoRockets,
-		moveCursorYAxis,
-	} = useTalenokoBazooka();
+		moveTakenokoCursorYAxis,
+	} = useTakenokoBazooka();
+	const {
+		RenderKinokoBazooka,
+		RenderKinokoRockets,
+		launchKinokoRockets,
+		moveKinokoCursorYAxis,
+	} = useKinokoBazooka();
 
 	const keyDownHandler = (e: KeyboardEvent<HTMLDivElement>) => {
 		if (!active) return;
 		if (e.key === "Tab") {
 			e.preventDefault();
 		}
+
+		// たけのこの操作
 		if (e.key === "ArrowUp") {
 			e.preventDefault();
-			moveCursorYAxis("up", speed);
-			setSpeed(speed + 1);
+			moveTakenokoCursorYAxis("up", takenokoBazookaSpeed);
+			setTakenokoBazookaSpeed(takenokoBazookaSpeed + 1);
 		}
 		if (e.key === "ArrowDown") {
 			e.preventDefault();
-			moveCursorYAxis("down", speed);
-			setSpeed(speed + 1);
+			moveTakenokoCursorYAxis("down", takenokoBazookaSpeed);
+			setTakenokoBazookaSpeed(takenokoBazookaSpeed + 1);
 		}
 		if (e.key === "ArrowLeft") {
+			e.preventDefault();
 			launchTakenokoRockets();
+		}
+
+		// きのこの操作
+		if (e.key === "w") {
+			e.preventDefault();
+			moveKinokoCursorYAxis("up", kinokoBazookaSpeed);
+			setKinokoBazookaSpeed(kinokoBazookaSpeed + 1);
+		}
+		if (e.key === "s") {
+			e.preventDefault();
+			moveKinokoCursorYAxis("down", kinokoBazookaSpeed);
+			setKinokoBazookaSpeed(kinokoBazookaSpeed + 1);
+		}
+		if (e.key === "d") {
+			e.preventDefault();
+			launchKinokoRockets();
 		}
 	};
 
 	const keyUpHandler = (e: KeyboardEvent<HTMLDivElement>) => {
 		if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-			setSpeed(10);
+			setTakenokoBazookaSpeed(10);
+		}
+		if (e.key === "w" || e.key === "s") {
+			setKinokoBazookaSpeed(10);
 		}
 	};
 
@@ -54,6 +84,8 @@ const BattleField = () => {
 		>
 			<RenderTakenokoBazooka />
 			<RenderTakenokoRockets />
+			<RenderKinokoBazooka />
+			<RenderKinokoRockets />
 		</div>
 	);
 };

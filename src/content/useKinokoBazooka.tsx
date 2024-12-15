@@ -1,35 +1,35 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import TakenokoBazooka from "./TakenokoBazooka";
-import TakenokoRockets from "./TakenokoRockets";
+import KinokoBazooka from "./KinokoBazooka";
+import KinokoRockets from "./KinokoRockets";
 
-interface TakenokoRocketProps {
-	takenokoRocketId: number;
+interface KinokoRocketProps {
+	kinokoRocketId: number;
 	yAxis: number;
 	startTime: number;
 	timestamp: number;
 	exploded: boolean;
 }
 
-const useTakenokoBazooka = () => {
+const useKinokoBazooka = () => {
 	const [cursorYAxis, setCursorYAxis] = useState(0);
 	const [launchStanby, setLaunchStanby] = useState(false);
 	const animationFrameIdRef = useRef<number | null>(null);
-	const [rockets, setRockets] = useState<TakenokoRocketProps[]>([]);
+	const [rockets, setRockets] = useState<KinokoRocketProps[]>([]);
 
-	const explode = (takenokoRocketId: number) => {
+	const explode = (kinokoRocketId: number) => {
 		for (const rocket of rockets) {
-			if (rocket.takenokoRocketId === takenokoRocketId) {
+			if (rocket.kinokoRocketId === kinokoRocketId) {
 				rocket.exploded = true;
 			}
 		}
 		setRockets((rockets) => {
 			return rockets.filter(
-				(rocket) => rocket.takenokoRocketId !== takenokoRocketId,
+				(rocket) => rocket.kinokoRocketId !== kinokoRocketId,
 			);
 		});
 	};
 
-	const moveTakenokoCursorYAxis = (direction: "up" | "down", speed: number) => {
+	const moveKinokoCursorYAxis = (direction: "up" | "down", speed: number) => {
 		if (direction === "up") {
 			setCursorYAxis((cursorYAxis) =>
 				cursorYAxis - speed > 0 ? cursorYAxis - speed : 0,
@@ -57,7 +57,7 @@ const useTakenokoBazooka = () => {
 						yAxis: cursorYAxis,
 						startTime: timestamp,
 						timestamp,
-						takenokoRocketId: rocketId,
+						kinokoRocketId: rocketId,
 						exploded: false,
 					},
 				]);
@@ -76,24 +76,24 @@ const useTakenokoBazooka = () => {
 		return () => cancelAnimationFrame(animationFrameIdRef.current as number);
 	}, [loop]);
 
-	const RenderTakenokoBazooka = () => {
-		return <TakenokoBazooka yAxis={cursorYAxis} />;
+	const RenderKinokoBazooka = () => {
+		return <KinokoBazooka yAxis={cursorYAxis} />;
 	};
 
-	const RenderTakenokoRockets = () => {
-		return <TakenokoRockets takenokoRockets={rockets} explode={explode} />;
+	const RenderKinokoRockets = () => {
+		return <KinokoRockets kinokoRockets={rockets} explode={explode} />;
 	};
 
-	const launchTakenokoRockets = () => {
+	const launchKinokoRockets = () => {
 		setLaunchStanby(true);
 	};
 
 	return {
-		RenderTakenokoBazooka,
-		RenderTakenokoRockets,
-		launchTakenokoRockets,
-		moveTakenokoCursorYAxis,
+		RenderKinokoBazooka,
+		RenderKinokoRockets,
+		launchKinokoRockets,
+		moveKinokoCursorYAxis,
 	};
 };
 
-export default useTakenokoBazooka;
+export default useKinokoBazooka;

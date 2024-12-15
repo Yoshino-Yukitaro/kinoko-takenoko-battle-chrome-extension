@@ -1,23 +1,23 @@
 import { useCallback, useEffect } from "react";
 import ExplosionManager from "./explosionManager";
 
-interface TakenokoRocketProps {
+interface KinokoRocketProps {
 	yAxis: number;
 	startTime: number;
 	timestamp: number;
-	takenokoRocketId: number;
+	kinokoRocketId: number;
 	exploded: boolean;
-	explode: (takenokoRocketId: number) => void;
+	explode: (kinokoRocketId: number) => void;
 }
 
-const TakenokoRocket = ({
+const KinokoRocket = ({
 	yAxis,
 	startTime,
 	timestamp,
-	takenokoRocketId,
+	kinokoRocketId,
 	exploded,
 	explode,
-}: TakenokoRocketProps) => {
+}: KinokoRocketProps) => {
 	const maxWindowWidth = window.innerWidth;
 	const explosionManager = ExplosionManager.getInstance();
 
@@ -33,21 +33,19 @@ const TakenokoRocket = ({
 	}, [exploded, startTime, timestamp, maxWindowWidth]);
 
 	useEffect(() => {
-		if (explosionManager.judge(calcXAxis(), yAxis, "takenoko")) {
-			explode(takenokoRocketId);
+		if (explosionManager.judge(calcXAxis() + 80, yAxis, "kinoko")) {
+			explode(kinokoRocketId);
 		}
-	}, [calcXAxis, explode, explosionManager, takenokoRocketId, yAxis]);
+	}, [calcXAxis, explode, explosionManager, kinokoRocketId, yAxis]);
 
 	return (
 		<div
 			style={{
 				position: "absolute",
-				left: `calc(100vw - ${calcXAxis()}px)`,
+				left: `${calcXAxis()}px`,
 				top: `${yAxis}px`,
-				backgroundColor: "#F4D386",
 				width: "80px",
 				height: "40px",
-				clipPath: "ellipse(70px 20px at 100% 50%)",
 			}}
 		>
 			<div
@@ -55,14 +53,26 @@ const TakenokoRocket = ({
 					position: "absolute",
 					top: "0",
 					left: "0%",
-					backgroundColor: "#392921",
+					backgroundColor: "#F4D386",
 					width: "70px",
-					height: "40px",
-					paddingLeft: "20px",
+					height: "20px",
+					borderRadius: "16px",
 				}}
-			/>
+			>
+				<div
+					style={{
+						position: "absolute",
+						top: "-10px",
+						left: "40px",
+						backgroundColor: "#392921",
+						width: "30px",
+						height: "40px",
+						clipPath: "ellipse(40px 23px at -30% 50%)",
+					}}
+				/>
+			</div>
 		</div>
 	);
 };
 
-export default TakenokoRocket;
+export default KinokoRocket;
