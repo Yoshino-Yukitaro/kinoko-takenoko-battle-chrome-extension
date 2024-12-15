@@ -54,7 +54,6 @@ class ExplosionManager {
 		});
 		if (explodedLeafs.length > 0) {
 			this.explodeAround(x, y, kind);
-			console.log("Explosion!!!!!!!!!!!!!!!");
 			return true;
 		}
 		return false;
