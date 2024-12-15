@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import KinokoBazooka from "./KinokoBazooka";
 import KinokoRockets from "./KinokoRockets";
+import GameManager from "./gameManager";
 
 interface KinokoRocketProps {
 	kinokoRocketId: number;
@@ -15,6 +16,7 @@ const useKinokoBazooka = () => {
 	const [launchStanby, setLaunchStanby] = useState(false);
 	const animationFrameIdRef = useRef<number | null>(null);
 	const [rockets, setRockets] = useState<KinokoRocketProps[]>([]);
+	const gameManager = GameManager.getInstance();
 
 	const explode = (kinokoRocketId: number) => {
 		for (const rocket of rockets) {
@@ -28,6 +30,21 @@ const useKinokoBazooka = () => {
 			);
 		});
 	};
+
+	const goal = useCallback(
+		(kinokoRocketId: number) => {
+			gameManager.kinokoGoal(kinokoRocketId);
+			console.log(
+				`goal: ${kinokoRocketId}, kinokopoint: ${gameManager.kinokoPoint}`,
+			);
+			setRockets((rockets) => {
+				return rockets.filter(
+					(rocket) => rocket.kinokoRocketId !== kinokoRocketId,
+				);
+			});
+		},
+		[gameManager],
+	);
 
 	const moveKinokoCursorYAxis = (direction: "up" | "down", speed: number) => {
 		if (direction === "up") {
@@ -81,7 +98,9 @@ const useKinokoBazooka = () => {
 	};
 
 	const RenderKinokoRockets = () => {
-		return <KinokoRockets kinokoRockets={rockets} explode={explode} />;
+		return (
+			<KinokoRockets kinokoRockets={rockets} explode={explode} goal={goal} />
+		);
 	};
 
 	const launchKinokoRockets = () => {

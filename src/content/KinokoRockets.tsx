@@ -11,9 +11,14 @@ interface KinokoRocketProps {
 interface KinokoRocketsProps {
 	kinokoRockets: KinokoRocketProps[];
 	explode: (kinokoRocketId: number) => void;
+	goal: (kinokoRocketId: number) => void;
 }
 
-const KinokoRockets = ({ kinokoRockets, explode }: KinokoRocketsProps) => {
+const KinokoRockets = ({
+	kinokoRockets,
+	explode,
+	goal,
+}: KinokoRocketsProps) => {
 	return (
 		<>
 			{kinokoRockets.map(
@@ -27,6 +32,7 @@ const KinokoRockets = ({ kinokoRockets, explode }: KinokoRocketsProps) => {
 							kinokoRocketId={kinokoRocketId}
 							exploded={exploded}
 							explode={explode}
+							goal={goal}
 						/>
 					);
 				},

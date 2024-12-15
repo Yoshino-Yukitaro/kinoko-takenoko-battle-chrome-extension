@@ -11,11 +11,13 @@ interface TakenokoRocketProps {
 interface TakenokoRocketsProps {
 	takenokoRockets: TakenokoRocketProps[];
 	explode: (takenokoRocketId: number) => void;
+	goal: (takenokoRocketId: number) => void;
 }
 
 const TakenokoRockets = ({
 	takenokoRockets,
 	explode,
+	goal,
 }: TakenokoRocketsProps) => {
 	return (
 		<>
@@ -30,6 +32,7 @@ const TakenokoRockets = ({
 							takenokoRocketId={takenokoRocketId}
 							exploded={exploded}
 							explode={explode}
+							goal={goal}
 						/>
 					);
 				},

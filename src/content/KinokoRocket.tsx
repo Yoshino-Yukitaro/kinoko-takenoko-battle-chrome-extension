@@ -8,6 +8,7 @@ interface KinokoRocketProps {
 	kinokoRocketId: number;
 	exploded: boolean;
 	explode: (kinokoRocketId: number) => void;
+	goal: (kinokoRocketId: number) => void;
 }
 
 const KinokoRocket = ({
@@ -17,6 +18,7 @@ const KinokoRocket = ({
 	kinokoRocketId,
 	exploded,
 	explode,
+	goal,
 }: KinokoRocketProps) => {
 	const maxWindowWidth = window.innerWidth;
 	const explosionManager = ExplosionManager.getInstance();
@@ -33,10 +35,22 @@ const KinokoRocket = ({
 	}, [exploded, startTime, timestamp, maxWindowWidth]);
 
 	useEffect(() => {
-		if (explosionManager.judge(calcXAxis() + 80, yAxis, "kinoko")) {
+		const xAxis = calcXAxis();
+		if (explosionManager.judge(xAxis + 80, yAxis, "kinoko")) {
 			explode(kinokoRocketId);
 		}
-	}, [calcXAxis, explode, explosionManager, kinokoRocketId, yAxis]);
+		if (xAxis + 80 >= maxWindowWidth) {
+			goal(kinokoRocketId);
+		}
+	}, [
+		calcXAxis,
+		explode,
+		explosionManager,
+		kinokoRocketId,
+		yAxis,
+		goal,
+		maxWindowWidth,
+	]);
 
 	return (
 		<div

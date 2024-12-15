@@ -8,6 +8,7 @@ interface TakenokoRocketProps {
 	takenokoRocketId: number;
 	exploded: boolean;
 	explode: (takenokoRocketId: number) => void;
+	goal: (takenokoRocketId: number) => void;
 }
 
 const TakenokoRocket = ({
@@ -17,6 +18,7 @@ const TakenokoRocket = ({
 	takenokoRocketId,
 	exploded,
 	explode,
+	goal,
 }: TakenokoRocketProps) => {
 	const maxWindowWidth = window.innerWidth;
 	const explosionManager = ExplosionManager.getInstance();
@@ -36,7 +38,18 @@ const TakenokoRocket = ({
 		if (explosionManager.judge(calcXAxis(), yAxis, "takenoko")) {
 			explode(takenokoRocketId);
 		}
-	}, [calcXAxis, explode, explosionManager, takenokoRocketId, yAxis]);
+		if (calcXAxis() + 80 >= maxWindowWidth) {
+			goal(takenokoRocketId);
+		}
+	}, [
+		calcXAxis,
+		explode,
+		explosionManager,
+		takenokoRocketId,
+		yAxis,
+		goal,
+		maxWindowWidth,
+	]);
 
 	return (
 		<div
