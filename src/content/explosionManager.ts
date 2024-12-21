@@ -14,14 +14,15 @@ class ExplosionManager {
 			const leaves: LeafRect[] = [];
 			const traverse = (node: HTMLElement) => {
 				if (
-					node.childNodes.length === 1 &&
-					node.textContent &&
-					node.getBoundingClientRect
+					node.nodeType === node.TEXT_NODE &&
+					node.textContent?.trim() !== "" &&
+					node.parentElement
 				) {
-					const rect = node.getBoundingClientRect();
+					const parent = node.parentElement;
+					const rect = parent.getBoundingClientRect();
 					const x = maxWindowWidth - rect.right;
 					const id: string = Math.random().toString();
-					node.id = id;
+					parent.id = id;
 					leaves.push({
 						rightTop: { x, y: rect.top },
 						rightBottom: { x, y: rect.bottom },
@@ -33,6 +34,27 @@ class ExplosionManager {
 					traverse(child as HTMLElement);
 				}
 			};
+			// const traverse = (node: HTMLElement) => {
+			// 	if (
+			// 		node.childNodes.length === 1 &&
+			// 		node.textContent &&
+			// 		node.getBoundingClientRect
+			// 	) {
+			// 		const rect = node.getBoundingClientRect();
+			// 		const x = maxWindowWidth - rect.right;
+			// 		const id: string = Math.random().toString();
+			// 		node.id = id;
+			// 		leaves.push({
+			// 			rightTop: { x, y: rect.top },
+			// 			rightBottom: { x, y: rect.bottom },
+			// 			leftx: rect.left,
+			// 			id,
+			// 		});
+			// 	}
+			// 	for (const child of node.childNodes) {
+			// 		traverse(child as HTMLElement);
+			// 	}
+			// };
 			traverse(document.body);
 			return leaves;
 		})();
