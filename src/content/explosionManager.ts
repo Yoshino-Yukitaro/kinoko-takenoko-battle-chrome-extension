@@ -115,7 +115,7 @@ class ExplosionManager {
 						span.style.zIndex = "256";
 						span.style.display = "inline-block";
 						span.textContent = char;
-						span.id = Math.random().toString();
+						span.id = crypto.randomUUID();
 						return span;
 					});
 					// leafの中身をspan要素に置き換える
