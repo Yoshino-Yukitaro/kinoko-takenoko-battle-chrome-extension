@@ -82,6 +82,7 @@ const KinokoRocket = ({
 						width: "30px",
 						height: "40px",
 						clipPath: "ellipse(40px 23px at -30% 50%)",
+						filter: "drop-shadow(3px 0 0.1px #fff)",
 					}}
 				/>
 			</div>

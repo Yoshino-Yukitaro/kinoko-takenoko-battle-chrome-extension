@@ -72,6 +72,7 @@ const TakenokoRocket = ({
 					width: "70px",
 					height: "40px",
 					paddingLeft: "20px",
+					filter: "drop-shadow(-5px 0 5px #fff)",
 				}}
 			/>
 		</div>
