@@ -32,10 +32,10 @@ const useLimitBoard = () => {
 		};
 	}, [loop]);
 
-	const start = () => {
+	const start = useCallback(() => {
 		setStartTimeStamp(0);
 		setIsStart(true);
-	};
+	}, []);
 
 	const RenderLimitBoard = () => {
 		return (

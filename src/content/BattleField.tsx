@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { KeyboardEvent } from "react";
 import useTakenokoBazooka from "./useTakenokoBazooka";
 import useKinokoBazooka from "./useKinokoBazooka";
 import useScoreBoard from "./useScoreBoard";
 import LimitBoard from "./LimitBoard";
 import useLimitBoard from "./useLimitBoard";
+import DynamicText from "./DynamicText";
 
 const BattleField = () => {
-	const [active, setActive] = useState(true);
+	const [active, setActive] = useState(false);
+	const [dynamicStartText, setDynamicStartText] = useState<
+		"3" | "2" | "1" | "go" | "Click to Start" | ""
+	>("Click to Start");
 	const [takenokoBazookaSpeed, setTakenokoBazookaSpeed] = useState(10);
 	const [kinokoBazookaSpeed, setKinokoBazookaSpeed] = useState(10);
 	const [takenokoRocketsRocketVector, setTakenokoRocketsRocketVector] =
@@ -54,7 +58,6 @@ const BattleField = () => {
 			moveKinokoCursorYAxis("down", kinokoBazookaSpeed);
 		}
 
-		if (!active) return;
 		if (e.key === "Tab") {
 			e.preventDefault();
 		}
@@ -76,6 +79,7 @@ const BattleField = () => {
 		}
 		if (e.key === "ArrowLeft") {
 			e.preventDefault();
+			if (!active) return;
 			launchTakenokoRockets();
 			return;
 		}
@@ -97,6 +101,7 @@ const BattleField = () => {
 		}
 		if (e.key === "d") {
 			e.preventDefault();
+			if (!active) return;
 			launchKinokoRockets();
 			return;
 		}
@@ -113,6 +118,24 @@ const BattleField = () => {
 		}
 	};
 
+	const clickToStart = () => {
+		setDynamicStartText("3");
+		setTimeout(() => {
+			setDynamicStartText("2");
+		}, 1000);
+		setTimeout(() => {
+			setDynamicStartText("1");
+		}, 2000);
+		setTimeout(() => {
+			setDynamicStartText("go");
+			setActive(true);
+			start();
+		}, 3000);
+		setTimeout(() => {
+			setDynamicStartText("");
+		}, 3300);
+	};
+
 	return (
 		<div
 			style={{
@@ -125,8 +148,10 @@ const BattleField = () => {
 			}}
 			onKeyDown={keyDownHandler}
 			onKeyUp={keyUpHandler}
+			onClick={clickToStart}
 			tabIndex={1}
 		>
+			<DynamicText text={dynamicStartText} />
 			<RenderScoreBoard />
 			<RenderLimitBoard />
 			<RenderTakenokoBazooka />
