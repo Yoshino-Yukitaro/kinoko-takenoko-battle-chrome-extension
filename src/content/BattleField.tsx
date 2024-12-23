@@ -6,6 +6,7 @@ import useScoreBoard from "./useScoreBoard";
 import LimitBoard from "./LimitBoard";
 import useLimitBoard from "./useLimitBoard";
 import DynamicText from "./DynamicText";
+import KeyIntroBoard from "./KeyIntroBoard";
 
 const BattleField = () => {
 	const [active, setActive] = useState(false);
@@ -147,6 +148,7 @@ const BattleField = () => {
 			tabIndex={1}
 		>
 			<DynamicText text={dynamicStartText} />
+			<KeyIntroBoard />
 			<RenderScoreBoard />
 			<RenderLimitBoard />
 			<RenderTakenokoBazooka />
