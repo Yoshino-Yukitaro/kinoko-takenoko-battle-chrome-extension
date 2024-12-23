@@ -21,7 +21,7 @@ class ExplosionManager {
 					const parent = node.parentElement;
 					const rect = parent.getBoundingClientRect();
 					const x = maxWindowWidth - rect.right;
-					const id: string = Math.random().toString();
+					const id: string = crypto.randomUUID();
 					parent.id = id;
 					leaves.push({
 						rightTop: { x, y: rect.top },
@@ -34,27 +34,6 @@ class ExplosionManager {
 					traverse(child as HTMLElement);
 				}
 			};
-			// const traverse = (node: HTMLElement) => {
-			// 	if (
-			// 		node.childNodes.length === 1 &&
-			// 		node.textContent &&
-			// 		node.getBoundingClientRect
-			// 	) {
-			// 		const rect = node.getBoundingClientRect();
-			// 		const x = maxWindowWidth - rect.right;
-			// 		const id: string = Math.random().toString();
-			// 		node.id = id;
-			// 		leaves.push({
-			// 			rightTop: { x, y: rect.top },
-			// 			rightBottom: { x, y: rect.bottom },
-			// 			leftx: rect.left,
-			// 			id,
-			// 		});
-			// 	}
-			// 	for (const child of node.childNodes) {
-			// 		traverse(child as HTMLElement);
-			// 	}
-			// };
 			traverse(document.body);
 			return leaves;
 		})();
@@ -107,7 +86,7 @@ class ExplosionManager {
 			const text = leaf.textContent;
 			if (text) {
 				leaf.style.overflow = "visible";
-				if (text.length > 1) {
+				if (text.trim().length > 1) {
 					const spans = text.split("").map((char) => {
 						const span = document.createElement("span");
 						span.style.position = "relative";
@@ -238,7 +217,10 @@ class ExplosionManager {
 					},
 				];
 			}
+			return;
 		}
+
+		this.domRects = this.domRects.filter((rect) => rect.id !== leafId);
 	}
 }
 
