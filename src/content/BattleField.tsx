@@ -3,6 +3,8 @@ import type { KeyboardEvent } from "react";
 import useTakenokoBazooka from "./useTakenokoBazooka";
 import useKinokoBazooka from "./useKinokoBazooka";
 import useScoreBoard from "./useScoreBoard";
+import LimitBoard from "./LimitBoard";
+import useLimitBoard from "./useLimitBoard";
 
 const BattleField = () => {
 	const [active, setActive] = useState(true);
@@ -26,8 +28,14 @@ const BattleField = () => {
 		moveKinokoCursorYAxis,
 	} = useKinokoBazooka();
 	const { takenokoGoal, kinokoGoal, RenderScoreBoard } = useScoreBoard();
+	const { start, RenderLimitBoard } = useLimitBoard();
 
 	const keyDownHandler = (e: KeyboardEvent<HTMLDivElement>) => {
+		// デバッグ用: スペースキーを押したらタイマースタート
+		if (e.key === " ") {
+			start();
+		}
+
 		// 動いている場合は動作続行
 		if (takenokoRocketsRocketVector === "up") {
 			setTakenokoBazookaSpeed(takenokoBazookaSpeed + 1);
@@ -120,6 +128,7 @@ const BattleField = () => {
 			tabIndex={1}
 		>
 			<RenderScoreBoard />
+			<RenderLimitBoard />
 			<RenderTakenokoBazooka />
 			<RenderTakenokoRockets takenokoGoal={takenokoGoal} />
 			<RenderKinokoBazooka />
