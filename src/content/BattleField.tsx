@@ -35,11 +35,6 @@ const BattleField = () => {
 	const { start, RenderLimitBoard } = useLimitBoard();
 
 	const keyDownHandler = (e: KeyboardEvent<HTMLDivElement>) => {
-		// デバッグ用: スペースキーを押したらタイマースタート
-		if (e.key === " ") {
-			start();
-		}
-
 		// 動いている場合は動作続行
 		if (takenokoRocketsRocketVector === "up") {
 			setTakenokoBazookaSpeed(takenokoBazookaSpeed + 1);
