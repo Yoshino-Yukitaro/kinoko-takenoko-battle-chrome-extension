@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { KeyboardEvent } from "react";
 import useTakenokoBazooka from "./useTakenokoBazooka";
 import useKinokoBazooka from "./useKinokoBazooka";
+import useScoreBoard from "./useScoreBoard";
 
 const BattleField = () => {
 	const [active, setActive] = useState(true);
@@ -24,6 +25,7 @@ const BattleField = () => {
 		launchKinokoRockets,
 		moveKinokoCursorYAxis,
 	} = useKinokoBazooka();
+	const { takenokoGoal, kinokoGoal, RenderScoreBoard } = useScoreBoard();
 
 	const keyDownHandler = (e: KeyboardEvent<HTMLDivElement>) => {
 		// 動いている場合は動作続行
@@ -117,10 +119,11 @@ const BattleField = () => {
 			onKeyUp={keyUpHandler}
 			tabIndex={1}
 		>
+			<RenderScoreBoard />
 			<RenderTakenokoBazooka />
-			<RenderTakenokoRockets />
+			<RenderTakenokoRockets takenokoGoal={takenokoGoal} />
 			<RenderKinokoBazooka />
-			<RenderKinokoRockets />
+			<RenderKinokoRockets kinokoGoal={kinokoGoal} />
 		</div>
 	);
 };

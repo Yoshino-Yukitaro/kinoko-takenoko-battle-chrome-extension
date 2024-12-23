@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import TakenokoBazooka from "./TakenokoBazooka";
 import TakenokoRockets from "./TakenokoRockets";
-import GameManager from "./gameManager";
 
 interface TakenokoRocketProps {
 	takenokoRocketId: number;
@@ -16,7 +15,6 @@ const useTakenokoBazooka = () => {
 	const [launchStanby, setLaunchStanby] = useState(false);
 	const animationFrameIdRef = useRef<number | null>(null);
 	const [rockets, setRockets] = useState<TakenokoRocketProps[]>([]);
-	const gameManager = GameManager.getInstance();
 
 	const explode = (takenokoRocketId: number) => {
 		for (const rocket of rockets) {
@@ -30,21 +28,6 @@ const useTakenokoBazooka = () => {
 			);
 		});
 	};
-
-	const goal = useCallback(
-		(takenokoRocketId: number) => {
-			gameManager.kinokoGoal(takenokoRocketId);
-			console.log(
-				`goal: ${takenokoRocketId}, kinokopoint: ${gameManager.kinokoPoint}`,
-			);
-			setRockets((rockets) => {
-				return rockets.filter(
-					(rocket) => rocket.takenokoRocketId !== takenokoRocketId,
-				);
-			});
-		},
-		[gameManager],
-	);
 
 	const moveTakenokoCursorYAxis = (direction: "up" | "down", speed: number) => {
 		if (direction === "up") {
@@ -98,7 +81,17 @@ const useTakenokoBazooka = () => {
 		return <TakenokoBazooka yAxis={cursorYAxis} />;
 	};
 
-	const RenderTakenokoRockets = () => {
+	const RenderTakenokoRockets = ({
+		takenokoGoal,
+	}: { takenokoGoal: (takenokoRocketId: number) => void }) => {
+		const goal = (takenokoRocketId: number) => {
+			takenokoGoal(takenokoRocketId);
+			setRockets((rockets) => {
+				return rockets.filter(
+					(rocket) => rocket.takenokoRocketId !== takenokoRocketId,
+				);
+			});
+		};
 		return (
 			<TakenokoRockets
 				takenokoRockets={rockets}
