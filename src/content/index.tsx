@@ -12,7 +12,7 @@ const activate = () => {
 	battlePanel.style.height = "100vh";
 	battlePanel.style.top = "0";
 	battlePanel.style.left = "0";
-	battlePanel.style.zIndex = "255";
+	battlePanel.style.zIndex = "65535";
 	document.body.style.overflow = "hidden";
 	document.body.appendChild(battlePanel);
 	createRoot(battlePanel).render(
