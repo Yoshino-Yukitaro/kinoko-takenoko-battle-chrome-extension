@@ -48,8 +48,9 @@ const useTakenokoBazooka = () => {
 
 	const moveTakenokoCursorYAxis = (direction: "up" | "down", speed: number) => {
 		if (direction === "up") {
-			setCursorYAxis((cursorYAxis) =>
-				cursorYAxis - speed > 0 ? cursorYAxis - speed : 0,
+			setCursorYAxis(
+				(cursorYAxis) =>
+					cursorYAxis - speed > 100 ? cursorYAxis - speed : 100, // ウインドウに到達するとフリーズするので、100px以上に設定
 			);
 		}
 		if (direction === "down") {
