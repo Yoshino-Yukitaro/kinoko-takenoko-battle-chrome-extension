@@ -6,6 +6,7 @@ const useLimitBoard = () => {
 	const [nowTimeStamp, setNowTimeStamp] = useState(0);
 	const [isStart, setIsStart] = useState(false);
 	const animationFrameIdRef = useRef<number | null>(null);
+	const LIMIT = 60000;
 
 	const loop = useCallback(
 		(timestamp: number) => {
@@ -17,7 +18,7 @@ const useLimitBoard = () => {
 				setStartTimeStamp(timestamp);
 				return;
 			}
-			if (timestamp - startTimeStamp > 30000) {
+			if (timestamp - startTimeStamp > LIMIT) {
 				setIsStart(false);
 				setStartTimeStamp(timestamp);
 			}
@@ -39,7 +40,7 @@ const useLimitBoard = () => {
 
 	const RenderLimitBoard = () => {
 		return (
-			<LimitBoard limitMiliSec={30000 - (nowTimeStamp - startTimeStamp)} />
+			<LimitBoard limitMiliSec={LIMIT - (nowTimeStamp - startTimeStamp)} />
 		);
 	};
 
