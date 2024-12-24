@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import type { KeyboardEvent } from "react";
 import useTakenokoBazooka from "./useTakenokoBazooka";
 import useKinokoBazooka from "./useKinokoBazooka";
 import useScoreBoard from "./useScoreBoard";
-import LimitBoard from "./LimitBoard";
 import useLimitBoard from "./useLimitBoard";
 import DynamicText from "./DynamicText";
 import KeyIntroBoard from "./KeyIntroBoard";

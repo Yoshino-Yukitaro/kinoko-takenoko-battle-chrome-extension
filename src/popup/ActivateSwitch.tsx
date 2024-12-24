@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 
 const ActivateSwitch = () => {
 	const [active, setActive] = useState(false);
-	const handleChange = () => {
-		setActive(!active);
-	};
 	const startBattle = () => {
 		setActive(true);
 	};
