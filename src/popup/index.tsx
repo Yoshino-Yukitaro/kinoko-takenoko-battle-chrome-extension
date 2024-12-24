@@ -42,7 +42,7 @@ root.render(
 						/>
 					</div>
 				</div>
-				きのこ・たけのこバトル
+				サクッときのこたけのこ戦争
 				<div style={{ transform: "rotate(90deg) scale(0.4)" }}>
 					<div
 						style={{
