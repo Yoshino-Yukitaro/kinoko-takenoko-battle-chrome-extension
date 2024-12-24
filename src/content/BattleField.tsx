@@ -7,9 +7,12 @@ import LimitBoard from "./LimitBoard";
 import useLimitBoard from "./useLimitBoard";
 import DynamicText from "./DynamicText";
 import KeyIntroBoard from "./KeyIntroBoard";
+import ResultWindow from "./ResultWindow";
 
 const BattleField = () => {
 	const [active, setActive] = useState(false);
+	const [isStarted, setIsStarted] = useState(false);
+	const [isEnd, setIsEnd] = useState(false);
 	const [dynamicStartText, setDynamicStartText] = useState<
 		"3" | "2" | "1" | "go" | "Click to Start" | ""
 	>("Click to Start");
@@ -32,10 +35,18 @@ const BattleField = () => {
 		launchKinokoRockets,
 		moveKinokoCursorYAxis,
 	} = useKinokoBazooka();
-	const { takenokoGoal, kinokoGoal, RenderScoreBoard } = useScoreBoard();
+	const {
+		takenokoGoal,
+		kinokoGoal,
+		RenderScoreBoard,
+		kinokoScore,
+		takenokoScore,
+		resetScore,
+	} = useScoreBoard();
 	const { start, RenderLimitBoard } = useLimitBoard();
 
 	const keyDownHandler = (e: KeyboardEvent<HTMLDivElement>) => {
+		if (isEnd) return;
 		// 動いている場合は動作続行
 		if (takenokoRocketsRocketVector === "up") {
 			setTakenokoBazookaSpeed(takenokoBazookaSpeed + 1);
@@ -130,6 +141,28 @@ const BattleField = () => {
 		setTimeout(() => {
 			setDynamicStartText("");
 		}, 3300);
+		setTimeout(() => {
+			setDynamicStartText("");
+			setIsEnd(true);
+			setActive(false);
+		}, 63000);
+	};
+
+	const onScreetClick = () => {
+		if (!isStarted) {
+			clickToStart();
+		}
+		if (!isEnd) {
+			setIsStarted(true);
+		}
+	};
+
+	const restartGame = () => {
+		resetScore();
+		setDynamicStartText("Click to Start");
+		setIsStarted(false);
+		setIsEnd(false);
+		setActive(false);
 	};
 
 	return (
@@ -144,17 +177,24 @@ const BattleField = () => {
 			}}
 			onKeyDown={keyDownHandler}
 			onKeyUp={keyUpHandler}
-			onClick={clickToStart}
+			onClick={onScreetClick}
 			tabIndex={1}
 		>
 			<DynamicText text={dynamicStartText} />
-			<KeyIntroBoard />
-			<RenderScoreBoard />
-			<RenderLimitBoard />
+			{!isEnd && <KeyIntroBoard />}
+			{!isEnd && <RenderLimitBoard />}
+			{!isEnd && <RenderScoreBoard />}
 			<RenderTakenokoBazooka />
 			<RenderTakenokoRockets takenokoGoal={takenokoGoal} />
 			<RenderKinokoBazooka />
 			<RenderKinokoRockets kinokoGoal={kinokoGoal} />
+			{isEnd && (
+				<ResultWindow
+					kinikoScore={kinokoScore}
+					takenokoScore={takenokoScore}
+					clickToStart={restartGame}
+				/>
+			)}
 		</div>
 	);
 };

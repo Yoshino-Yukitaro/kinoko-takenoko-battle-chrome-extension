@@ -21,13 +21,27 @@ const useScoreBoard = () => {
 		setGoalKinokoIds([...goalKinokoIds, kinokoRocketId]);
 	};
 
+	const resetScore = () => {
+		setKinokoScore(0);
+		setTakenokoScore(0);
+		setGoalKinokoIds([]);
+		setGoalTakenokoIds([]);
+	};
+
 	const RenderScoreBoard = () => {
 		return (
 			<ScoreBoard takenokoScore={takenokoScore} kinokoScore={kinokoScore} />
 		);
 	};
 
-	return { takenokoGoal, kinokoGoal, RenderScoreBoard };
+	return {
+		takenokoGoal,
+		kinokoGoal,
+		RenderScoreBoard,
+		kinokoScore,
+		takenokoScore,
+		resetScore,
+	};
 };
 
 export default useScoreBoard;

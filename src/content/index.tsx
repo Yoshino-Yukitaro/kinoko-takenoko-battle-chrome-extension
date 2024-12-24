@@ -4,6 +4,10 @@ import BattleField from "./BattleField";
 import ExplosionManager from "./explosionManager";
 
 const activate = () => {
+	window.scroll({
+		top: 0,
+		behavior: "smooth",
+	});
 	ExplosionManager.getInstance();
 	const battlePanel = document.createElement("div");
 	battlePanel.id = "battlePanel";
