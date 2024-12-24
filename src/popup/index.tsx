@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import ActivateSwitch from "./ActivateSwitch";
 
 const rootElement = document.getElementById("root") as HTMLElement;
-rootElement.style.width = "400px";
+rootElement.style.width = "420px";
 const root = createRoot(rootElement);
 
 root.render(

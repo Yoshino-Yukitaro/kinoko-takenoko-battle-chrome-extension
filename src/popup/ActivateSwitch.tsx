@@ -17,13 +17,6 @@ const ActivateSwitch = () => {
 	}, [active]);
 	return (
 		<div>
-			<label htmlFor="activate">有効化</label>
-			<input
-				type="checkbox"
-				id="activate"
-				checked={active}
-				onChange={handleChange}
-			/>
 			<button
 				type="button"
 				onClick={startBattle}
